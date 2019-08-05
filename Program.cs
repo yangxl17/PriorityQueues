@@ -3,10 +3,21 @@ using System.Runtime.InteropServices;
 
 namespace PriorityQueues
 {
-    class PriorityQueues<T> where T:class,IComparable<T>
+    class PriorityQueues<T> where T:IComparable<T>
     {
         private T[] Pqs;
         private int Size;
+        public int GetSize()
+        {
+            return Size;
+        }
+        public PriorityQueues(T[] pq)
+        {
+            Pqs = new T[pq.Length];
+            pq.CopyTo(Pqs, 0);
+            Size = Pqs.Length;
+            BuildMaxHeap();
+        }
         //Heap
         private int Parent(int pos)
         {
@@ -62,7 +73,7 @@ namespace PriorityQueues
             if(Size<1)
             {
                 Console.WriteLine("Heap underflow!");
-                return null;
+                return default(T);
             }
             else
             {
@@ -120,7 +131,15 @@ namespace PriorityQueues
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            int[] test = { 9, 3, 5, 7, 0, 10, 98 };
+            PriorityQueues<int> pq = new PriorityQueues<int>(test);
+            pq.HeapIncreaseKey(2, 100);
+            pq.MaxHeapInsert(50);
+            pq.MaxHeapInsert(6);
+            while(pq.GetSize()!=0)
+            {
+                Console.WriteLine(pq.HeapExtractMax());
+            }
         }
     }
 }
