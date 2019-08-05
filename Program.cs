@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace PriorityQueues
 {
@@ -7,6 +7,7 @@ namespace PriorityQueues
     {
         private T[] Pqs;
         private int Size;
+        //Heap
         private int Parent(int pos)
         {
             return (pos + 1) / 2 - 1;
@@ -49,6 +50,68 @@ namespace PriorityQueues
             for(int i=Size/2;i>=0;i--)
             {
                 MaxHeapify(i);
+            }
+        }
+        //PriorityQueues
+        public T Heapmaxmuim()
+        {
+            return Pqs[0];
+        }
+        public T HeapExtractMax()
+        {
+            if(Size<1)
+            {
+                Console.WriteLine("Heap underflow!");
+                return null;
+            }
+            else
+            {
+                T max = Pqs[0];
+                Pqs[0] = Pqs[Size - 1];
+                Size--;
+                MaxHeapify(0);
+                return max;
+            }
+        }
+        public void HeapIncreaseKey(int pos,T key)
+        {
+            if(pos<Size)
+            {
+                if(Pqs[pos].CompareTo(key)<0)
+                {
+                    Pqs[pos] = key;
+                    int i = pos;
+                    while(i>0&&Pqs[Parent(i)].CompareTo(Pqs[i])<0)
+                    {
+                        Swap(ref Pqs[Parent(i)], ref Pqs[i]);
+                        i = Parent(i);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("new key is small than current key!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("index is bigger than size!");
+            }
+        }
+        public void MaxHeapInsert(T key)
+        {
+            Size++;
+            if(Size>Pqs.Length)
+            {
+                T[] nPqs = new T[2 * Size];
+                Pqs.CopyTo(nPqs,0);
+                Pqs = nPqs;
+            }
+            Pqs[Size - 1] = key;
+            int i = Size-1;
+            while (i > 0 && Pqs[Parent(i)].CompareTo(Pqs[i]) < 0)
+            {
+                Swap(ref Pqs[Parent(i)], ref Pqs[i]);
+                i = Parent(i);
             }
         }
 
